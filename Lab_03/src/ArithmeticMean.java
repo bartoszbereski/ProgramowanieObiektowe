@@ -3,14 +3,27 @@ public class ArithmeticMean {
 		Integer sum = 0;
 		if(args.length == 0) {
 			System.out.println("Brak argumentów programu");
-		}else {
-			System.out.println("srednia arytmetyczna Liczb: " );
-			for(int i = 0; i < args.length; i++) {
-				System.out.print(args[i]+", ");
-				sum = sum + Integer.valueOf(args[i]);
-	        }
-			int mean = sum/args.length;
-			System.out.println("wynosi "+mean);
+			return;
 		}
+		else if(args.length == 1) {
+			System.out.print("Przekazano tylko jedną wartość: "+ args[0]);
+			return;
+		}
+		int first_element =  Integer.valueOf(args[0]);
+		System.out.print("srednia arytmetyczna Liczb: " );
+		System.out.print(first_element);
+		for(int i = 1; i < args.length; i++) {
+			System.out.print(","+args[i]);
+			sum = sum + Integer.valueOf(args[i]);
+        }
+		sum = sum + first_element;
+		int mean = sum/args.length;
+		int reszta = sum%args.length;
+		if(reszta != 0) {
+			System.out.println(" wynosi "+mean+",reszta: "+reszta);
+			return;
+		}
+		System.out.println(" wynosi "+mean);
+	
 	}
 }
