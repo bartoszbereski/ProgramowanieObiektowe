@@ -6,6 +6,8 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Properties;
+import java.util.Random;
+import java.util.Scanner;
 
 public class MultiplicationTable {
 	public static void main(String[] args) throws IOException {
@@ -27,5 +29,27 @@ public class MultiplicationTable {
         }
         FileReader reader = new FileReader(file);
         prop.load(reader);
+		Random rand = new Random();
+		int randz = Integer.parseInt((String) prop.get("wartosc_maximum"));
+		
+        Scanner scanner = new Scanner(System.in);
+        int goodans = 0; int questionsCounter = 0; double percent;
+        while (true) {
+        	int n = rand.nextInt(randz);
+    		int m = rand.nextInt(randz);
+    		n+=1;m+=1;
+        	System.out.print(m+" * "+n+" = ");
+            int mul = scanner.nextInt();
+            questionsCounter= questionsCounter+1;
+            if((m*n) == mul) { goodans=goodans+1; }
+            percent = 100*goodans/questionsCounter;
+            if(questionsCounter == 25) {break;}
+            if(questionsCounter >= 10 ) {
+            	if(percent >= 70) {
+            		break;}
+            	}
+            if(goodans/questionsCounter < 70) {continue;}
+        }
+        System.out.println("procent poprawnych odpowiedzi "+percent+"%");
     }
 }
