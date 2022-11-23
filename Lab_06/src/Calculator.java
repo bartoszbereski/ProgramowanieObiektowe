@@ -1,10 +1,11 @@
+package dokalkulatora;
+
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import java.awt.*;
 import java.awt.event.*;
-import java.text.DecimalFormat;
 
 public class Calculator implements ActionListener {
     JFrame f;
@@ -23,7 +24,7 @@ public class Calculator implements ActionListener {
         previous = "";
         f = new JFrame("My First Calculator - v.0.1");
         f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        f.setSize(600, 250);
+        f.setSize(400, 250);
         f.setLocationRelativeTo(null);
         f.setResizable(false);
         f.setLayout(null);
@@ -83,9 +84,7 @@ public class Calculator implements ActionListener {
         f.setVisible(true);
 
     }
-
     public void selectOperator(String newOperator) {
-        // if no number is entered yet
         if (current.isEmpty()) {
             operator = newOperator;
             return;
@@ -119,7 +118,7 @@ public class Calculator implements ActionListener {
             case "-":
                 result = num1 - num2;
                 break;
-            case "÷":
+            case "/":
                 result = num1 / num2;
                 break;
             default:
