@@ -1,5 +1,3 @@
-package dokalkulatora;
-
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -17,14 +15,16 @@ public class Calculator implements ActionListener {
     JPanel panel;
     Font scoreFont = new Font("Arial", Font.BOLD, 16);
     double num1 = 0, num2 = 0, result = 0, tmp = 0;
-    String previous, current, operator;
+    String previous, current, operator, tmpprev;
+    boolean dividingByZero, lastActionEqual;
 
     Calculator() {
         current = "";
         previous = "";
+
         f = new JFrame("My First Calculator - v.0.1");
         f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        f.setSize(400, 250);
+        f.setSize(600, 400);
         f.setLocationRelativeTo(null);
         f.setResizable(false);
         f.setLayout(null);
@@ -84,6 +84,7 @@ public class Calculator implements ActionListener {
         f.setVisible(true);
 
     }
+
     public void selectOperator(String newOperator) {
         if (current.isEmpty()) {
             operator = newOperator;
@@ -97,17 +98,26 @@ public class Calculator implements ActionListener {
         current = "";
     }
 
-    public void updateOutput() {
-        textfield.setText(current);
+    public void withoutDot() {
+        if (current.length() > 0) {
+            String beforeDot = current.split("\\.")[0];    //".".split("\\.", -1)
+            String afterDot = current.split("\\.")[1];
+            if (afterDot.equals("0")) {
+                current = beforeDot;
+            }
+        }
     }
 
     public void calculate() {
-        if (previous.length() < 1 || current.length() < 1) {
-            return;
+        result = 0.0;
+        if (previous.length() < 1) {
+            num1 = Double.parseDouble(current);
+            num2 = Double.parseDouble(tmpprev);
+        } else {
+            num1 = Double.parseDouble(previous);
+            num2 = Double.parseDouble(current);
+            tmpprev = current;
         }
-        double result = 0.0;
-        double num1 = Double.parseDouble(previous);
-        double num2 = Double.parseDouble(current);
         switch (operator) {
             case "*":
                 result = num1 * num2;
@@ -119,14 +129,26 @@ public class Calculator implements ActionListener {
                 result = num1 - num2;
                 break;
             case "/":
-                result = num1 / num2;
+                if (num2 != 0.0) {
+                    result = num1 / num2;
+                } else {
+                    dividingByZero = true;
+                }
                 break;
             default:
                 break;
         }
-        current = String.valueOf(result);
-        operator = null;
+        if (!dividingByZero) {
+            current = String.valueOf(result);
+            textfield.setText(current);
+
+        } else {
+            textfield.setFont(scoreFont);
+            textfield.setForeground(Color.red);
+            textfield.setText("ERROR: Division by zero");
+        }
         previous = "";
+        withoutDot();
     }
 
     public void appendToOutput(String num) {
@@ -141,36 +163,30 @@ public class Calculator implements ActionListener {
             }
         }
         if (e.getSource() == addButton) {
-            num1 = Double.parseDouble(textfield.getText());
             selectOperator(addButton.getText());
         }
         if (e.getSource() == difButton) {
-            num1 = Double.parseDouble(textfield.getText());
             selectOperator(difButton.getText());
         }
-
         if (e.getSource() == mulButton) {
-            num1 = Double.parseDouble(textfield.getText());
             selectOperator(mulButton.getText());
         }
-
         if (e.getSource() == divButton) {
-            num1 = Double.parseDouble(textfield.getText());
             selectOperator(divButton.getText());
         }
         if (e.getSource() == clcButton) {
             current = "";
             previous = "";
             operator = null;
+            textfield.setForeground(Color.black);
         }
-        updateOutput();
         if (e.getSource() == eqButton) {
             calculate();
         }
-        updateOutput();
+        textfield.setText(current);
     }
 
     public static void main(String[] args) {
-        Calculator cal = new Calculator();
+        new Calculator();
     }
 }
